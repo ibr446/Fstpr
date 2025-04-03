@@ -1,90 +1,18 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI,APIRouter
+from models import User
 from db import Database
-from config import DATABASE_URL
-from models import User, BaseResponse
+from rounters import router
 
-app = FastAPI()
-
-router = APIRouter()
-db = Database(db_url=DATABASE_URL)
-
-
-@router.get('/users/')
-async def read_users():
-    try:
-        await db.connect()
-        users = await db.read_users()
-        return BaseResponse(status=True, body=list(users), error="null")
-
-    except Exception as e:
-        return BaseResponse(status=False, body="null", error=str(e))
-
-    finally:
-        await db.close()
+def create_app()->None:
+    app = FastAPI(
+        title="User",
+        version='0.0.1',
+        description="FastAPI CRUD Asyncpg",
+        debug=True,
+    )
+    app.include_router(router)
+    return app
 
 
-
-# @router.get('/user/{user_id}')
-# async def show_user(user_id: int):
-#     try:
-#         await db.connect()
-#         user = await db.show_user(user_id)
-#         if user:
-#             return BaseResponse(status=True, body=user, error="null")
-#         return BaseResponse(status=False, body="null", error="User not found")
-#     except Exception as e:
-#         return BaseResponse(status=False, body="null", error=str(e))
-#     finally:
-#         await db.close()
-
-
-
-
-
-@router.post('/users/')
-async def create_user(user : User):
-    try:
-        await db.connect()
-        await db.create_user(user.fullname, user.username, user.email, user.password)
-        return BaseResponse(status=True, body=dict(user), error="null")
-
-    except Exception as e:
-        return BaseResponse(status=False, body="null", error=str(e))
-
-    finally:
-        await db.close()
-
-
-
-
-@router.put('/users/{user_id}')
-async def update_user(user: User, user_id: int):
-    try:
-        await db.connect()
-        await db.update_user(user_id, user.username, user.email, user.password)
-        return BaseResponse(status=True, body=f"User with id {user_id} updated successfully", error="null")
-
-    except Exception as e:
-        return BaseResponse(status=False, body="null", error=str(e))
-
-    finally:
-        await db.close()
-
-
-@router.delete('/users/{user_id}')
-async def delete_user(user_id: int):
-    try:
-        await db.connect()
-        await db.delete_user(user_id)
-        return BaseResponse(status=True, body=f"User with id {user_id} deleted successfully", error="null")
-
-    except Exception as e:
-        return BaseResponse(status=False, body="null", error=str(e))
-
-    finally:
-        await db.close()
-
-
-app.include_router(router, prefix="/api", tags=["Users CRUD API"])
-
+app  = create_app()
 
