@@ -10,7 +10,7 @@ DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 
 
-DATABASE_URL = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DATABASE_URL = f"postgresql://neondb_owner:npg_C51ThWmdjlqE@ep-aged-snowflake-a57llk4f-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require"
 
 
 
