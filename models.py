@@ -1,4 +1,10 @@
+from wsgiref.validate import validator
+
 from pydantic import BaseModel
+from typing import Optional
+from service import PasswordService
+
+
 
 class User(BaseModel):
     id: int
@@ -6,6 +12,8 @@ class User(BaseModel):
     username: str
     email: str
     password: str
+
+
 
 
 class BaseResponse(BaseModel):

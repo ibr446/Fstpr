@@ -1,10 +1,13 @@
 import asyncpg
+import logging
+from asyncpg.exceptions import PostgresError
 
 
 class Database:
     def __init__(self, db_url: str):
         self.db_url = db_url
         self.pool = None
+        self.conn = None
 
     async def connect(self):
         """
@@ -12,6 +15,7 @@ class Database:
         """
         self.pool = await asyncpg.create_pool(self.db_url, min_size=1, max_size=5)
         print("Database connection pool created")
+
 
     async def create_user(self, fullname: str, username: str, email: str, password: str):
         """
@@ -78,6 +82,37 @@ class Database:
                 return users_dict
             else:
                 return []
+
+
+    # async def show_user(self, user_id: int):
+    #     async with self.pool.acquire() as connection:
+    #         await connection.execute("SELECT * FROM users WHERE id = $1;")
+    # async def close(self):
+    #     if self.pool:
+    #         await self.pool.close()
+    #         print("Database connection pool closed")
+    import logging
+    from asyncpg.exceptions import PostgresError
+
+    # async def show_user(self, user_id: int):
+    #     if not self.conn:
+    #         logging.error("Database connection is not established")
+    #         raise ValueError("Database connection is not established")
+    #
+    #     query = "SELECT * FROM users WHERE id = $1;"
+    #     try:
+    #         user = await self.conn.fetchrow(query, user_id)
+    #         if user:
+    #             logging.info(f"User {user_id} retrieved successfully")
+    #             return dict(user)
+    #         else:
+    #             logging.warning(f"User {user_id} not found")
+    #             return None
+    #     except PostgresError as e:
+    #         logging.error(f"Database error occurred: {e}")
+    #         raise
+
+
 
     async def delete_user(self, user_id: int):
         """

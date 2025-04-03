@@ -24,6 +24,23 @@ async def read_users():
 
 
 
+# @router.get('/user/{user_id}')
+# async def show_user(user_id: int):
+#     try:
+#         await db.connect()
+#         user = await db.show_user(user_id)
+#         if user:
+#             return BaseResponse(status=True, body=user, error="null")
+#         return BaseResponse(status=False, body="null", error="User not found")
+#     except Exception as e:
+#         return BaseResponse(status=False, body="null", error=str(e))
+#     finally:
+#         await db.close()
+
+
+
+
+
 @router.post('/users/')
 async def create_user(user : User):
     try:
@@ -36,6 +53,7 @@ async def create_user(user : User):
 
     finally:
         await db.close()
+
 
 
 
@@ -68,3 +86,5 @@ async def delete_user(user_id: int):
 
 
 app.include_router(router, prefix="/api", tags=["Users CRUD API"])
+
+
