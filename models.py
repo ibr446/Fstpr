@@ -1,22 +1,18 @@
-from wsgiref.validate import validator
-
 from pydantic import BaseModel
-from typing import Optional
-from service import PasswordService
-
-
-
-class User(BaseModel):
-    id: int
-    fullname: str
-    username: str
-    email: str
-    password: str
+from typing import Optional,Any,List
 
 
 
 
 class BaseResponse(BaseModel):
-    status: bool
-    body: str | list | dict | None = None
-    error: str | None = None
+    status: bool = True
+    data: Optional[Any] = None
+    errors: Optional[List[dict]] = None
+
+
+
+class User(BaseModel):
+    full_name: str
+    username: str
+    email: str
+    password: str
